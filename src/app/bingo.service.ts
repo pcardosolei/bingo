@@ -12,29 +12,38 @@ export class BingoService {
   protected bingoNumbers$ = new ReplaySubject(5);
 
   // the numbers that will be drawn
-  bingoStructure: Array<number>;
+  protected bingoStructure: Array<number>;
 
   // flag when someone has a bingo
-  unsubscribe$ = new Subject();
+  protected unsubscribe$ = new Subject();
 
   constructor() { }
 
-  startBingo() {
+  public startBingo() {
+    // lets reset bingo before we begin;
+    this.resetBingo();
+
+    // logic for the draw a ball on bingo
     const bingoDraw = timer(0, 2000).pipe( map( () => this.drawNumber()) , takeUntil(this.unsubscribe$)).subscribe(
       (newNumber: number) => {
         this.populateSubjects(newNumber);
-      }
-    );
+      }, (error) => { 
+        console.log(error);
+      }, () => { 
+        // lets reset bingo. it just keeps going 
+        console.log('Lets get all the balls again and start a new BINGO GAME')
+        this.startBingo(); 
+      });
   }
 
   // reset the bingo
-  resetBingo() {
-    this.bingoStructure = [...Array(75).keys()];
+  private resetBingo() {
+    this.bingoStructure = Array.from({length: 75}, (v,k) => k+1);
     this.unsubscribe$ = new Subject();
   }
 
   // draw a number
-  drawNumber() {
+  private drawNumber() {
     // no more balls left to draw
     if (this.bingoStructure.length === 0) {
       this.unsubscribe$.next();
@@ -49,23 +58,23 @@ export class BingoService {
   }
 
   // populate Subjects
-  populateSubjects(drawnValue: number) {
+  private populateSubjects(drawnValue: number) {
     this.bingoNumbers$.next(drawnValue);
     this.lastNumber$.next(drawnValue);
   }
 
   // someone made BINGO!!!!
-  bingo() {
+  public bingo() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
 
   /* Observers */
-  lastNumberAsObservable() {
+  public lastNumberAsObservable() {
     return this.lastNumber$.asObservable();
   }
 
-  bingoNumbersAsObservable() {
+  public bingoNumbersAsObservable() {
     return this.bingoNumbers$.asObservable();
   }
 }
