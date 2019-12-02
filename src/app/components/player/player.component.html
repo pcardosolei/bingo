@@ -1,1 +1,18 @@
-<p>player works!</p>
+<!-- LATEST NUMBERS DRAWN-->
+<section class="section">
+    <h6 class="title is-3">Latest Numbers!</h6>
+    <div class="columns">
+        <div *ngFor="let item of drawnBingoNumbers" class="column is-2">{{item}}</div>
+    </div>
+</section>
+
+<section class="section">
+    <h6 class="title is-3">Your BINGO Card</h6>
+    <div class="columns" *ngFor="let column of bingoCard">
+        <div *ngFor="let row of column" class="column is-2" 
+        [ngClass]="{ 'selected-space': isSelected  }">
+            {{row}}
+        </div>
+    </div>
+    <button class="button" (click)="notifyBingo()">Bingo!!</button>
+</section>

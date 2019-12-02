@@ -14,27 +14,25 @@ export class ShowNumbersComponent implements OnInit {
 
   // Subscriptions
   bingoNumbers$: Subscription;
-  lastNumber$: Subscription;
 
   // Aditional Info
   latestNumber: number;
+  numbersMissing: number;
 
   ngOnInit() {
-    this.bingoNumbers$ = this.bingoService.bingoNumbersAsObservable().subscribe( (info: any) => {
+    this.bingoNumbers$ = this.bingoService.lastNumberAsObservable().subscribe( (info: any) => {
+      if(info === -1){
+        this.numbersMissing = 75;
+      } else {
+        this.numbersMissing = this.numbersMissing - 1;
+      } 
       this.latestNumber = info;
     });
-
-    this.lastNumber$ = this.bingoService.lastNumberAsObservable().subscribe( (info) => {
-      console.log('Last Number ' + info);
-    });
-
-    this.bingoService.startBingo();
   }
 
   ngOnDestroy(): void {
     // In Order to avoid memory leaks
     if (this.bingoNumbers$) { this.bingoNumbers$.unsubscribe(); }
-    if (this.lastNumber$) { this.lastNumber$.unsubscribe(); }
   }
 
 }

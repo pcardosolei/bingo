@@ -24,7 +24,7 @@ export class BingoService {
     this.resetBingo();
 
     // logic for the draw a ball on bingo
-    const bingoDraw = timer(0, 2000).pipe( map( () => this.drawNumber()) , takeUntil(this.unsubscribe$)).subscribe(
+    const bingoDraw = timer(0, 500).pipe( map( () => this.drawNumber()) , takeUntil(this.unsubscribe$)).subscribe(
       (newNumber: number) => {
         this.populateSubjects(newNumber);
       }, (error) => { 
@@ -48,6 +48,7 @@ export class BingoService {
     if (this.bingoStructure.length === 0) {
       this.unsubscribe$.next();
       this.unsubscribe$.complete();
+      this.populateSubjects(-1);
       return;
     }
 

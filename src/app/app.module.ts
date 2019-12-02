@@ -15,7 +15,7 @@ import { ShowNumbersComponent } from './show-numbers/show-numbers.component';
   imports: [
     BrowserModule,
     AppRoutingModule
-  ],
+  ],  
   providers: [],
   bootstrap: [AppComponent]
 })

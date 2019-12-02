@@ -1,6 +1,8 @@
 <!-- Show last number -->
 <section>
-    <div *ngIf="latestNumber">
+    <h2>And the latest number is:</h2>
+    <div class="latestNumber" *ngIf="latestNumber">
         {{latestNumber}}
     </div>
+    <p>Numbers drawed: {{75 - numbersMissing}} of 75!</p>
 </section>

@@ -10,7 +10,17 @@ export class AppComponent implements OnInit {
 
   constructor(private bingoService: BingoService){}
 
+  public playerActive = false;
+
   ngOnInit(): void {
     this.bingoService.startBingo();
+  }
+
+  addPlayer(): void {
+    this.playerActive = !this.playerActive;
+  }
+
+  getButtonInfo(): String {
+    return (this.playerActive) ? "Leave Bingo Stage" : "Start Playing Bingo!";
   }
 }
