@@ -1,8 +1,11 @@
 <!-- Show last number -->
 <section>
+    <img src="assets/bingo.jpeg" [ngStyle]="{'margin-bottom': '5px'}">
     <h2>And the latest number is:</h2>
     <div class="latestNumber" *ngIf="latestNumber">
         {{latestNumber}}
     </div>
     <p>Numbers drawed: {{75 - numbersMissing}} of 75!</p>
 </section>
+
+<button *ngIf="latestNumber == -1" class="button" (click)="restartBingo()">Restart Bingo</button>

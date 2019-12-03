@@ -17,5 +17,7 @@
         </div>
     </div>
     <button class="button" (click)="notifyBingo()" [ngStyle]="{'margin-right': '20px'}">Bingo!!</button>
-    <button class="button" (click)="unsubLatest()">Expert Mode</button>
+    <button *ngIf="!expert" class="button" (click)="unsubLatest()">Expert Mode</button>
+    <button *ngIf="expert" class="button" (click)="subLatest()">Normal Mode</button>
+    <button class="button" (click)="createBingoCard()" [ngStyle]="{'margin-left': '20px'}">Renew Card</button>
 </section>

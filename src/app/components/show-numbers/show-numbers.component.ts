@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { BingoService } from '../bingo.service';
+import { BingoService } from 'src/app/bingo.service';
 
 @Component({
   selector: 'app-show-numbers',
@@ -35,4 +35,7 @@ export class ShowNumbersComponent implements OnInit {
     if (this.bingoNumbers$) { this.bingoNumbers$.unsubscribe(); }
   }
 
+  restartBingo(): void{
+    this.bingoService.startBingo();
+  }
 }

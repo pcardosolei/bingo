@@ -17,19 +17,14 @@ export class PlayerComponent implements OnInit, OnDestroy {
   bingoCard: [][];
   drawnBingoNumbers = []; 
 
+  // boolean 
+  expert: boolean;
+
   constructor(private bingoService: BingoService){}
 
   ngOnInit(){
     this.createBingoCard();
-    this.lastNumbers$ = this.bingoService.bingoNumbersAsObservable().subscribe( (info: number) => {
-      if(info === -1){ this.drawnBingoNumbers = [];}
-      else{
-        if(this.drawnBingoNumbers.length === 5){
-          this.drawnBingoNumbers.shift();
-        }
-        this.drawnBingoNumbers.push(info);
-      }
-    });
+    this.subLatest();
   }
 
   ngOnDestroy(){
@@ -81,5 +76,19 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
   unsubLatest(){
     this.lastNumbers$.unsubscribe();
+    this.expert = true;
+  }
+
+  subLatest(){
+    this.expert = false;
+    this.lastNumbers$ = this.bingoService.bingoNumbersAsObservable().subscribe( (info: number) => {
+      if(info === -1){ this.drawnBingoNumbers = [];}
+      else{
+        if(this.drawnBingoNumbers.length === 5){
+          this.drawnBingoNumbers.shift();
+        }
+        this.drawnBingoNumbers.push(info);
+      }
+    });
   }
 }
