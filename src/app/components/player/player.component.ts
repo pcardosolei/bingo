@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer2, ElementRef } from '@angular/core';
 import { BingoService } from 'src/app/bingo.service';
 import { Subscription } from 'rxjs';
 import { ThrowStmt } from '@angular/compiler';
@@ -38,7 +38,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
   /* Player has bingo ! */
   notifyBingo(){
-    this.bingoService.bingo();
+    this.bingoService.bingo(this.bingoCard);
   };
 
   /* 
@@ -73,9 +73,13 @@ export class PlayerComponent implements OnInit, OnDestroy {
     for(let i = 0; i < 5; i++){
       let drawIndex = Math.random() * poolOfNumbers.length;
       const drawnNumber = poolOfNumbers.splice(drawIndex, 1);
-      row.push(drawnNumber);
+      row.push({number: drawnNumber, active: false});
     } 
   
     return row;
+  }
+
+  unsubLatest(){
+    this.lastNumbers$.unsubscribe();
   }
 }

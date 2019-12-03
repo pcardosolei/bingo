@@ -17,6 +17,9 @@ export class BingoService {
   // flag when someone has a bingo
   protected unsubscribe$ = new Subject();
 
+  // checking if a player made bingo
+  protected checking = false;
+
   constructor() { }
 
   public startBingo() {
@@ -24,15 +27,14 @@ export class BingoService {
     this.resetBingo();
 
     // logic for the draw a ball on bingo
-    const bingoDraw = timer(0, 500).pipe( map( () => this.drawNumber()) , takeUntil(this.unsubscribe$)).subscribe(
+    const bingoDraw = timer(0, 1000).pipe( map( () => this.drawNumber()) , takeUntil(this.unsubscribe$)).subscribe(
       (newNumber: number) => {
         this.populateSubjects(newNumber);
       }, (error) => { 
         console.log(error);
       }, () => { 
         // lets reset bingo. it just keeps going 
-        console.log('Lets get all the balls again and start a new BINGO GAME')
-        this.startBingo(); 
+        console.log('BINGO GAME is over');
       });
   }
 
@@ -44,6 +46,9 @@ export class BingoService {
 
   // draw a number
   private drawNumber() {
+    // is checking if the player has BINGO
+    if(this.checking){ return; }
+
     // no more balls left to draw
     if (this.bingoStructure.length === 0) {
       this.unsubscribe$.next();
@@ -65,9 +70,28 @@ export class BingoService {
   }
 
   // someone made BINGO!!!!
-  public bingo() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+  public bingo(playerBingoCard) {
+    this.checking = true;
+    if(this.checkingPlayerCard(playerBingoCard) === true){
+      this.unsubscribe$.next();
+      this.unsubscribe$.complete();
+      alert('You Made Bingo');
+    } else {
+      alert('Nope. no Bingo for you');
+    }
+    this.checking = false;
+  }
+
+  // checks if the player won
+  public checkingPlayerCard(playerBingoCard){
+    for(let row of playerBingoCard){
+      for(let column of row){
+        for(let number of this.bingoStructure){
+          if(number == column.number){ return false; }
+        }
+      }
+    }
+    return true;
   }
 
   /* Observers */
